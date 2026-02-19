@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discrete Structures Reviewer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3e;
+    --accent1: #7c6af7;
+    --accent2: #f76a8c;
+    --accent3: #6af7c8;
+    --accent4: #f7c66a;
+    --text: #e8e8f0;
+    --muted: #7a7a9a;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(124,106,247,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,247,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 60px 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(124,106,247,0.2), transparent 70%);
+    pointer-events: none;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(247,106,140,0.15), transparent 70%);
+    pointer-events: none;
+  }
+
+  .course-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent3);
+    background: rgba(106,247,200,0.08);
+    border: 1px solid rgba(106,247,200,0.3);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 30%, var(--accent1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    font-family: var(--mono);
+  }
+
+  /* Nav pills */
+  .nav-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 50px;
+    justify-content: center;
+  }
+
+  .nav-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-pill:hover, .nav-pill.active {
+    border-color: var(--accent1);
+    color: var(--accent1);
+    background: rgba(124,106,247,0.08);
+  }
+
+  /* Section headers */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-block {
+    margin-bottom: 60px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(124,106,247,0.4);
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-weight: 400;
+  }
+
+  .badge-purple { background: rgba(124,106,247,0.15); color: var(--accent1); border: 1px solid rgba(124,106,247,0.3); }
+  .badge-pink   { background: rgba(247,106,140,0.15); color: var(--accent2); border: 1px solid rgba(247,106,140,0.3); }
+  .badge-green  { background: rgba(106,247,200,0.12); color: var(--accent3); border: 1px solid rgba(106,247,200,0.3); }
+  .badge-yellow { background: rgba(247,198,106,0.12); color: var(--accent4); border: 1px solid rgba(247,198,106,0.3); }
+
+  .card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  /* Symbol highlight */
+  .sym {
+    font-family: var(--mono);
+    color: var(--accent3);
+    background: rgba(106,247,200,0.08);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  /* Truth tables */
+  .truth-table-wrap {
+    overflow-x: auto;
+    margin-top: 16px;
+  }
+
+  table {
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 13px;
+    width: auto;
+    min-width: 200px;
+  }
+
+  th {
+    background: rgba(124,106,247,0.15);
+    color: var(--accent1);
+    padding: 10px 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  td {
+    padding: 9px 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  td.t { color: var(--accent3); font-weight: 700; }
+  td.f { color: var(--accent2); font-weight: 700; }
+
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* Key-value list */
+  .kv-list { list-style: none; }
+  .kv-list li {
+    display: flex;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 14px;
+    line-height: 1.6;
+    align-items: flex-start;
+  }
+
+  .kv-list li:last-child { border-bottom: none; }
+
+  .kv-key {
+    font-family: var(--mono);
+    color: var(--accent4);
+    min-width: 120px;
+    font-size: 12px;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .kv-val { color: var(--muted); }
+
+  /* Example blocks */
+  .example-block {
+    background: var(--surface2);
+    border-left: 3px solid var(--accent1);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .example-block .label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent1);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  /* Grid for connectives */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 640px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* Big operator display */
+  .op-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .op-card:hover { border-color: var(--accent1); transform: translateY(-2px); }
+
+  .op-symbol {
+    font-size: 36px;
+    font-family: var(--mono);
+    color: var(--accent1);
+    display: block;
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+
+  .op-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .op-desc {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* Precedence table */
+  .prec-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .prec-row:last-child { border-bottom: none; }
+
+  .prec-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(124,106,247,0.15);
+    color: var(--accent1);
+    border-radius: 50%;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .prec-op { font-family: var(--mono); font-size: 14px; color: #fff; flex: 1; }
+  .prec-note { font-size: 12px; color: var(--muted); }
+
+  /* Set notation */
+  .set-notation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .set-chip {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--accent4);
+  }
+
+  /* Venn diagram ASCII */
+  .venn-box {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px;
+    line-height: 1.8;
+  }
+
+  /* Important note */
+  .note-box {
+    background: rgba(247,198,106,0.06);
+    border: 1px solid rgba(247,198,106,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 14px;
+  }
+
+  .note-box p {
+    color: rgba(247,198,106,0.85) !important;
+    font-size: 13px !important;
+    margin: 0 !important;
+  }
+
+  .note-box .note-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  /* Quick reference mega table */
+  .mega-table th { font-size: 11px; padding: 8px 12px; }
+  .mega-table td { font-size: 12px; padding: 8px 12px; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .container { padding: 20px 12px 60px; }
+    header { padding: 40px 20px; }
+  }
+
+  /* Scroll animation */
+  .card, .op-card {
+    animation: fadeUp 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="course-tag">IT2212 · Discrete Structures</div>
+    <h1>Complete Reviewer</h1>
+    <p class="subtitle">Propositional Logic + Set Theory · All topics from your pointers list</p>
+  </header>
+
+  <!-- Nav -->
+  <div class="nav-pills">
+    <a href="#propositions" class="nav-pill">Propositions</a>
+    <a href="#connectives" class="nav-pill">Connectives</a>
+    <a href="#truth-tables" class="nav-pill">Truth Tables</a>
+    <a href="#tautology" class="nav-pill">Tautology / Contradiction</a>
+    <a href="#sets" class="nav-pill">Sets</a>
+    <a href="#set-ops" class="nav-pill">Set Operations</a>
+    <a href="#subsets" class="nav-pill">Subsets</a>
+  </div>
+
+
+  <!-- ===== PROPOSITIONS ===== -->
+  <div class="section-block" id="propositions">
+    <div class="section-label">01 — Propositional Logic Basics</div>
+
+    <div class="card">
+      <div class="card-title">What is a Proposition? <span class="badge badge-purple">DEFINITION</span></div>
+      <p>A <strong>proposition</strong> is a declarative statement that is either <strong>true (T/1)</strong> or <strong>false (F/0)</strong> — never both, never neither.</p>
+      <div class="example-block">
+        <div class="label">Examples</div>
+        "Chickens can fly." → Proposition ✓ (Truth: F)<br>
+        "x &gt; 10" → NOT a proposition (depends on x)<br>
+        "Please keep phones silent." → NOT a proposition (request)
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Law of Identity <span class="badge badge-green">LAW</span></div>
+        <p>Everything is identical to itself. <span class="sym">P = P</span></p>
+        <p style="color:var(--muted); font-size:13px;">If water is water, anything discovered to be water has the same properties.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Law of Excluded Middle <span class="badge badge-green">LAW</span></div>
+        <p>Every proposition must be <strong>either true or false</strong> — not both, not neither.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Law of Non-Contradiction <span class="badge badge-green">LAW</span></div>
+      <p>Logically correct propositions <strong>cannot affirm and deny</strong> the same thing simultaneously.</p>
+      <p>"Is it January 1 today?" — answer can only be yes or no, not both.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Compound Proposition <span class="badge badge-purple">CONCEPT</span></div>
+      <p>A proposition constructed by combining one or more existing propositions using logical connectives.</p>
+      <div class="example-block">
+        <div class="label">Example</div>
+        P₁: "You are 18 years old."<br>
+        P₂: "You are fully vaccinated."<br>
+        Compound: "You are 18 years old <strong>and</strong> fully vaccinated."
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== CONNECTIVES ===== -->
+  <div class="section-block" id="connectives">
+    <div class="section-label">02 — Logical Connectives</div>
+
+    <!-- Operator quick overview -->
+    <div class="grid-2" style="margin-bottom:16px;">
+      <div class="op-card"><span class="op-symbol">~</span><div class="op-name">Negation</div><div class="op-desc">NOT</div></div>
+      <div class="op-card"><span class="op-symbol">∧</span><div class="op-name">Conjunction</div><div class="op-desc">AND</div></div>
+      <div class="op-card"><span class="op-symbol">∨</span><div class="op-name">Disjunction</div><div class="op-desc">OR</div></div>
+      <div class="op-card"><span class="op-symbol">→</span><div class="op-name">Implication</div><div class="op-desc">IF … THEN</div></div>
+      <div class="op-card"><span class="op-symbol">↔</span><div class="op-name">Biconditional</div><div class="op-desc">IF AND ONLY IF</div></div>
+      <div class="op-card"><span class="op-symbol">⊕</span><div class="op-name">XOR</div><div class="op-desc">EXCLUSIVE OR</div></div>
+    </div>
+
+    <!-- Negation -->
+    <div class="card">
+      <div class="card-title">Negation <span class="sym">~P</span> or <span class="sym">¬P</span></div>
+      <p>States the <strong>opposite</strong> of the proposition. True becomes false, false becomes true.</p>
+      <div class="truth-table-wrap">
+        <table>
+          <tr><th>P</th><th>~P</th></tr>
+          <tr><td class="t">T</td><td class="f">F</td></tr>
+          <tr><td class="f">F</td><td class="t">T</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Conjunction -->
+    <div class="card">
+      <div class="card-title">Conjunction <span class="sym">A ∧ B</span></div>
+      <p>True <strong>only when BOTH</strong> propositions are true.</p>
+      <div class="truth-table-wrap">
+        <table>
+          <tr><th>A</th><th>B</th><th>A ∧ B</th></tr>
+          <tr><td class="t">T</td><td class="t">T</td><td class="t">T</td></tr>
+          <tr><td class="t">T</td><td class="f">F</td><td class="f">F</td></tr>
+          <tr><td class="f">F</td><td class="t">T</td><td class="f">F</td></tr>
+          <tr><td class="f">F</td><td class="f">F</td><td class="f">F</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Disjunction -->
+    <div class="card">
+      <div class="card-title">Disjunction <span class="sym">A ∨ B</span></div>
+      <p>True when <strong>at least one</strong> proposition is true. False only when both are false.</p>
+      <div class="truth-table-wrap">
+        <table>
+          <tr><th>A</th><th>B</th><th>A ∨ B</th></tr>
+          <tr><td class="t">T</td><td class="t">T</td><td class="t">T</td></tr>
+          <tr><td class="t">T</td><td class="f">F</td><td class="t">T</td></tr>
+          <tr><td class="f">F</td><td class="t">T</td><td class="t">T</td></tr>
+          <tr><td class="f">F</td><td class="f">F</td><td class="f">F</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Implication -->
+    <div class="card">
+      <div class="card-title">Implication <span class="sym">A → B</span></div>
+      <p>IF A (antecedent) THEN B (consequence). Only <strong>false when A is true and B is false</strong>.</p>
+      <div class="truth-table-wrap">
+        <table>
+          <tr><th>A</th><th>B</th><th>A → B</th></tr>
+          <tr><td class="t">T</td><td class="t">T</td><td class="t">T</td></tr>
+          <tr><td class="t">T</td><td class="f">F</td><td class="f">F</td></tr>
+          <tr><td class="f">F</td><td class="t">T</td><td class="t">T</td></tr>
+          <tr><td class="f">F</td><td class="f">F</td><td class="t">T</td></tr>
+        </table>
+      </div>
+
+      <div style="margin-top:16px;">
+        <p style="font-weight:700; color:#fff; font-size:14px; margin-bottom:10px;">Forms derived from A → B:</p>
+        <ul class="kv-list">
+          <li><span class="kv-key">Converse</span><span class="kv-val">B → A — swap antecedent and consequence</span></li>
+          <li><span class="kv-key">Contrapositive</span><span class="kv-val">~B → ~A — negate and swap (logically equivalent to original)</span></li>
+          <li><span class="kv-key">Inverse</span><span class="kv-val">~A → ~B — negate both</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- XOR -->
+    <div class="card">
+      <div class="card-title">XOR (Exclusive Or) <span class="sym">A ⊕ B</span></div>
+      <p>True when propositions have <strong>different values</strong>. False when both are the same.</p>
+      <p>Used in computer science for bitwise operations, cryptography, detecting overflow, and logic circuits.</p>
+      <div class="truth-table-wrap">
+        <table>
+          <tr><th>A</th><th>B</th><th>A ⊕ B</th></tr>
+          <tr><td class="t">T</td><td class="t">T</td><td class="f">F</td></tr>
+          <tr><td class="t">T</td><td class="f">F</td><td class="t">T</td></tr>
+          <tr><td class="f">F</td><td class="t">T</td><td class="t">T</td></tr>
+          <tr><td class="f">F</td><td class="f">F</td><td class="f">F</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Biconditional -->
+    <div class="card">
+      <div class="card-title">Biconditional <span class="sym">A ↔ B</span></div>
+      <p>True when <strong>both propositions have the same truth value</strong> (both T or both F). Uses "if and only if."</p>
+      <div class="truth-table-wrap">
+        <table>
+          <tr><th>A</th><th>B</th><th>A ↔ B</th></tr>
+          <tr><td class="t">T</td><td class="t">T</td><td class="t">T</td></tr>
+          <tr><td class="t">T</td><td class="f">F</td><td class="f">F</td></tr>
+          <tr><td class="f">F</td><td class="t">T</td><td class="f">F</td></tr>
+          <tr><td class="f">F</td><td class="f">F</td><td class="t">T</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== TRUTH TABLES & PRECEDENCE ===== -->
+  <div class="section-block" id="truth-tables">
+    <div class="section-label">03 — Truth Tables &amp; Precedence</div>
+
+    <div class="card">
+      <div class="card-title">Precedence of Logical Operators <span class="badge badge-yellow">ORDER</span></div>
+      <p>Like PEMDAS in math, logical operators follow a strict order of evaluation (highest to lowest priority):</p>
+      <div style="margin-top:16px;">
+        <div class="prec-row"><div class="prec-num">1</div><div class="prec-op">~ (Negation)</div><div class="prec-note">Evaluated first</div></div>
+        <div class="prec-row"><div class="prec-num">2</div><div class="prec-op">∧ (Conjunction)</div><div class="prec-note">AND</div></div>
+        <div class="prec-row"><div class="prec-num">3</div><div class="prec-op">∨ (Disjunction)</div><div class="prec-note">OR</div></div>
+        <div class="prec-row"><div class="prec-num">4</div><div class="prec-op">→ (Implication)</div><div class="prec-note">IF-THEN</div></div>
+        <div class="prec-row"><div class="prec-num">5</div><div class="prec-op">↔ (Biconditional)</div><div class="prec-note">Evaluated last</div></div>
+      </div>
+      <div class="example-block" style="margin-top:16px;">
+        <div class="label">Example: ~A ∧ B</div>
+        Step 1: ~A (negation first)<br>
+        Step 2: (~A) ∧ B (then conjunction)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Master Truth Table Reference <span class="badge badge-purple">REFERENCE</span></div>
+      <div class="truth-table-wrap">
+        <table class="mega-table">
+          <tr>
+            <th>P</th><th>~P</th>
+            <th>A</th><th>B</th>
+            <th>A∧B</th><th>A∨B</th><th>A⊕B</th><th>A→B</th><th>A↔B</th>
+          </tr>
+          <tr>
+            <td class="t">T</td><td class="f">F</td>
+            <td class="t">T</td><td class="t">T</td>
+            <td class="t">T</td><td class="t">T</td><td class="f">F</td><td class="t">T</td><td class="t">T</td>
+          </tr>
+          <tr>
+            <td class="f">F</td><td class="t">T</td>
+            <td class="t">T</td><td class="f">F</td>
+            <td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="f">F</td><td class="f">F</td>
+          </tr>
+          <tr>
+            <td>—</td><td>—</td>
+            <td class="f">F</td><td class="t">T</td>
+            <td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="f">F</td>
+          </tr>
+          <tr>
+            <td>—</td><td>—</td>
+            <td class="f">F</td><td class="f">F</td>
+            <td class="f">F</td><td class="f">F</td><td class="f">F</td><td class="t">T</td><td class="t">T</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== TAUTOLOGY / CONTRADICTION / CONTINGENCY ===== -->
+  <div class="section-block" id="tautology">
+    <div class="section-label">04 — Tautology, Contradiction &amp; Contingency</div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Tautology <span class="badge badge-green">ALWAYS T</span></div>
+        <p>A statement that is <strong>true regardless</strong> of the truth values of its parts.</p>
+        <div class="example-block">
+          <div class="label">Example: A ∨ ~A</div>
+          A=T: T ∨ F = <strong>T</strong><br>
+          A=F: F ∨ T = <strong>T</strong>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Contradiction <span class="badge badge-pink">ALWAYS F</span></div>
+        <p>A statement that is <strong>always false</strong> regardless of truth values. Opposite of tautology.</p>
+        <div class="example-block">
+          <div class="label">Example: A ∧ ~A</div>
+          A=T: T ∧ F = <strong>F</strong><br>
+          A=F: F ∧ T = <strong>F</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Contingency <span class="badge badge-yellow">MIXED</span></div>
+      <p>A statement that is <strong>neither a tautology nor a contradiction</strong> — it has a mix of true and false values.</p>
+      <div class="example-block">
+        <div class="label">Example: A → ~A</div>
+        A=T: T → F = <strong>F</strong><br>
+        A=F: F → T = <strong>T</strong><br>
+        → Mixed results = Contingency
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Logical Equivalence <span class="sym">≡</span></div>
+      <p>Two different compound propositions are <strong>logically equivalent</strong> if they have the exact same truth value in every case.</p>
+      <div class="example-block">
+        <div class="label">Key Equivalences to Know</div>
+        (A → B) ≡ (~A ∨ B)<br>
+        ~(A ∨ B) ≡ (~A ∧ ~B)  &nbsp; [De Morgan's]<br>
+        ~(A ∧ B) ≡ (~A ∨ ~B)  &nbsp; [De Morgan's]<br>
+        A ≡ ~~A  &nbsp; (double negation)
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== SET THEORY ===== -->
+  <div class="section-block" id="sets">
+    <div class="section-label">05 — Set Theory Fundamentals</div>
+
+    <div class="card">
+      <div class="card-title">Set Defined <span class="badge badge-purple">DEFINITION</span></div>
+      <p>A <strong>well-defined, unordered collection</strong> of objects called <em>elements</em> or <em>members</em>. Denoted by capital letters.</p>
+      <p>Must be well-defined: "Set of all official James Bond films" ✓ vs "Set of best TV shows" ✗</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Set Notation <span class="badge badge-purple">NOTATION</span></div>
+      <ul class="kv-list">
+        <li><span class="kv-key">Roster Method</span><span class="kv-val">List all elements: S = {0, 1, 2, 3, 4}</span></li>
+        <li><span class="kv-key">Set Builder</span><span class="kv-val">Describe condition: S = {whole numbers less than 5}</span></li>
+        <li><span class="kv-key">Finite Set</span><span class="kv-val">Countable elements: A = {letters of alphabet} → 26 elements</span></li>
+        <li><span class="kv-key">Infinite Set</span><span class="kv-val">Uncountable: X = {even whole numbers} = {2, 4, 6, 8, …}</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Universal Set <span class="sym">U</span></div>
+      <p>The set that <strong>contains all elements</strong> relevant to a particular discussion or problem. All subsets exist within U.</p>
+      <div class="example-block">
+        <div class="label">Example</div>
+        U = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}<br>
+        EVEN = {0, 2, 4, 6, 8} ← subset of U<br>
+        ODD  = {1, 3, 5, 7, 9} ← subset of U
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Element Notation <span class="badge badge-green">SYMBOLS</span></div>
+      <div class="set-notation">
+        <div class="set-chip">x ∈ S → x IS an element of S</div>
+        <div class="set-chip">x ∉ S → x is NOT an element of S</div>
+      </div>
+      <div class="example-block" style="margin-top:14px;">
+        <div class="label">Example: E = set of even numbers</div>
+        2 ∈ E  (2 is an element of E)<br>
+        3 ∉ E  (3 is NOT an element of E)
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== SUBSETS ===== -->
+  <div class="section-block" id="subsets">
+    <div class="section-label">06 — Subsets</div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Subset <span class="sym">A ⊆ B</span></div>
+        <p>A is a subset of B if <strong>every element of A is also in B</strong>.</p>
+        <div class="example-block">
+          <div class="label">Formula</div>
+          A ⊆ U if ∀x [x ∈ A → x ∈ U]
+        </div>
+        <p style="margin-top:12px;">Number of subsets of a set with n elements: <span class="sym">2ⁿ</span></p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Proper Subset <span class="sym">A ⊂ B</span></div>
+        <p>A is a proper subset of B if A ⊆ B <strong>AND A ≠ B</strong> (A doesn't equal B).</p>
+        <p style="margin-top:12px;">Number of proper subsets: <span class="sym">2ⁿ − 1</span></p>
+        <div class="note-box" style="margin-top:12px;">
+          <div class="note-title">Key difference</div>
+          <p>Every set is a subset of itself, but NOT a proper subset of itself.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Subset Count Examples <span class="badge badge-yellow">FORMULA</span></div>
+      <ul class="kv-list">
+        <li><span class="kv-key">A = {dog, cat}</span><span class="kv-val">n=2 → Subsets: 2² = 4 | Proper Subsets: 2²−1 = 3</span></li>
+        <li><span class="kv-key">B = {dog, cat, bird, fish}</span><span class="kv-val">n=4 → Subsets: 2⁴ = 16 | Proper Subsets: 2⁴−1 = 15</span></li>
+        <li><span class="kv-key">C = {a, b, c}</span><span class="kv-val">n=3 → Subsets: 2³ = 8 | Proper Subsets: 2³−1 = 7</span></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ===== SET OPERATIONS ===== -->
+  <div class="section-block" id="set-ops">
+    <div class="section-label">07 — Set Operations</div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Set Union <span class="sym">A ∪ B</span></div>
+        <p>All elements in A <strong>OR</strong> B (or both). Combines everything from both sets.</p>
+        <div class="example-block">
+          <div class="label">Example</div>
+          A = {1,2,3,4,5}, B = {6,7,8,9,10}<br>
+          A ∪ B = {1,2,3,4,5,6,7,8,9,10}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Set Intersection <span class="sym">A ∩ B</span></div>
+        <p>Only elements that are in <strong>BOTH</strong> A and B.</p>
+        <div class="example-block">
+          <div class="label">Example</div>
+          C = {0,1,…,100}, D = {50,100,150,200…}<br>
+          C ∩ D = {50, 100}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Set Difference <span class="sym">A − B</span></div>
+        <p>Elements in A that are <strong>NOT in B</strong>. Note: A−B ≠ B−A.</p>
+        <div class="example-block">
+          <div class="label">Example</div>
+          A = {1,2,3,…,10}, B = {2,4,6,8,10}<br>
+          A − B = {1, 3, 5, 7, 9}<br>
+          B − A = {} (null set)
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Set Complement <span class="sym">A'</span> or <span class="sym">Aᶜ</span></div>
+        <p>All elements in the Universal Set U that are <strong>NOT in A</strong>.</p>
+        <div class="example-block">
+          <div class="label">Example</div>
+          U = {letters of alphabet}<br>
+          V = {vowels}<br>
+          V' = {consonants}
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Symmetric Difference <span class="sym">A ⊕ B</span></div>
+      <p>All elements in A or B, but <strong>NOT in their intersection</strong>. Equivalent to <span class="sym">(A ∩ B)'</span>.</p>
+      <div class="example-block">
+        <div class="label">Example</div>
+        A = {3, 6, 9}, B = {2, 4, 6, 8, 10}<br>
+        A ∩ B = {6}  ← excluded<br>
+        A ⊕ B = {2, 3, 4, 8, 9, 10}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Venn Diagram <span class="badge badge-purple">VISUAL TOOL</span></div>
+      <p>A visual way of representing sets using circles inside a rectangle (the Universal Set U). Overlapping regions show intersections.</p>
+      <div class="venn-box">
+        ┌─────────────── U ───────────────┐<br>
+        │  ╭──────────╮  ╭──────────╮    │<br>
+        │  │  A only  │∩∩│  B only  │    │<br>
+        │  │          │  │          │    │<br>
+        │  ╰──────────╯  ╰──────────╯    │<br>
+        └─────────────────────────────────┘<br>
+        <span style="color:var(--accent1)">A ∩ B = overlapping region</span>
+      </div>
+      <div class="note-box" style="margin-top:14px;">
+        <div class="note-title">Tip</div>
+        <p>In the Venn diagram from your handout: Mary and William play all 3 sports (center overlap), while Debbie plays none (outside all circles).</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Set Operations — Quick Reference <span class="badge badge-yellow">CHEAT SHEET</span></div>
+      <ul class="kv-list">
+        <li><span class="kv-key">A ∪ B</span><span class="kv-val">UNION — elements in A or B (or both)</span></li>
+        <li><span class="kv-key">A ∩ B</span><span class="kv-val">INTERSECTION — elements in both A and B</span></li>
+        <li><span class="kv-key">A − B</span><span class="kv-val">DIFFERENCE — elements in A but not in B</span></li>
+        <li><span class="kv-key">A'</span><span class="kv-val">COMPLEMENT — elements in U but not in A</span></li>
+        <li><span class="kv-key">A ⊕ B</span><span class="kv-val">SYMMETRIC DIFF — elements in A or B, not both</span></li>
+        <li><span class="kv-key">A ⊆ B</span><span class="kv-val">SUBSET — every element of A is in B</span></li>
+        <li><span class="kv-key">A ⊂ B</span><span class="kv-val">PROPER SUBSET — A ⊆ B and A ≠ B</span></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- Footer -->
+  <div style="text-align:center; padding-top:20px; border-top:1px solid var(--border);">
+    <p style="font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:2px;">IT2212 · DISCRETE STRUCTURES · REVIEWER</p>
+  </div>
+
+</div>
+
+</body>
+</html>
